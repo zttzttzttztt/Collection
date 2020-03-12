@@ -1,0 +1,34 @@
+public static Node copyRandomList2(Node head) {
+        Map<Node, Node> map = new TreeMap<>(new NodeComparator());
+        Node newHead = null;
+        Node newLast = null;
+        Node cur = head;
+        while (cur != null) {
+            Node node = new Node();
+            node.val = cur.val;
+            if (newHead == null) {
+                newHead = node;
+            } else {
+                newLast.next = node;
+            }
+            newLast = node;
+            map.put(cur, node);
+            cur = cur.next;
+        }
+
+        cur = head;
+        Node node = newHead;
+        while (node != null) {
+            if (cur.random != null) {
+                node.random = map.get(cur.random);
+            } else {
+                node.random = null;
+            }
+
+            cur = cur.next;
+            node = node.next;
+        }
+
+        return newHead;
+    }
+}
