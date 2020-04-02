@@ -1,0 +1,70 @@
+
+//单例模式
+
+ // 饿汉模式的单例
+public class SingletonHungry {
+    // 不允许外边调用构造方法
+    private SingletonHungry() {}
+
+    private static final SingletonHungry instance = new SingletonHungry();
+    public static SingletonHungry getInstance() {
+        return instance;
+    }
+}
+
+
+/**
+ * 懒汉模式的单例：单线程环境下正确
+ *                  多线程环境下有线程安全问题
+ */
+public class SingletonLazyVersion1 {
+    private SingletonLazyVersion1() {}
+
+    // 可见性
+    private static SingletonLazyVersion1 instance = null;
+    // getInstance 被第一次调用时，意味着有人需要 instance
+    // 再进行初始化
+    public static SingletonLazyVersion1 getInstance() {
+        // 原子开始
+        if (instance == null) {
+            instance = new SingletonLazyVersion1();
+        }
+        // 原子结束
+
+        return instance;
+    }
+}
+
+// 线程安全版本的懒汉单例
+public class SingletonLazyVersion2 {
+    private SingletonLazyVersion2() {}
+
+    private static SingletonLazyVersion2 instance = null;
+    public synchronized static SingletonLazyVersion2 getInstance() {
+        if (instance == null) {
+            instance = new SingletonLazyVersion2();
+        }
+
+        return instance;
+    }
+}
+
+
+//双重保证线程的安全
+public class SingletonLazyVersion3 {
+    private SingletonLazyVersion3() {}
+    private volatile static SingletonLazyVersion3 instance = null;
+
+    // A
+    private static SingletonLazyVersion3 getInstance() {
+        if (instance == null) {
+            synchronized (SingletonLazyVersion3.class) {
+                if (instance == null) {
+                    instance = new SingletonLazyVersion3();
+                }
+            }
+        }
+
+        return instance;
+    }
+}
